@@ -44,5 +44,5 @@ For more example usage, please see `mustache_test.go`
 * Change delimiter
 * Sections (boolean and enumerable)
 * Partials
-
+* Methods (incomplete)
 
