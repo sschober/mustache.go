@@ -259,20 +259,20 @@ func lookup(context reflect.Value, name string) reflect.Value {
         ret = val.Elem(reflect.NewValue(name))
     case *reflect.StructValue:
         ret = val.FieldByName(name)
-	if nil == ret {
-	  //fmt.Printf("No field %s found. Trying: %s\n", name,
-	  //val.Type())
-	  t := val.Type()
-	  for i := 0; i < t.NumMethod(); i++ {
-	    //fmt.Printf("%v: %d: %s\n", t, i,t.Method(i).Name)
-	    if name == t.Method(i).Name {
-	      //fmt.Printf("NumArgs: %d", t.Method(i).Type.NumIn())
-	      //fmt.Printf("result of calling: %v",
-	      //t.Method(i).Func.Call([]reflect.Value{val}))
-	      ret = t.Method(i).Func.Call([]reflect.Value{val})[0]
-	    }
-	  }
-	}
+        if nil == ret {
+            //fmt.Printf("No field %s found. Trying: %s\n", name,
+            //val.Type())
+            t := val.Type()
+            for i := 0; i < t.NumMethod(); i++ {
+                //fmt.Printf("%v: %d: %s\n", t, i,t.Method(i).Name)
+                if name == t.Method(i).Name {
+                    //fmt.Printf("NumArgs: %d", t.Method(i).Type.NumIn())
+                    //fmt.Printf("result of calling: %v",
+                    //t.Method(i).Func.Call([]reflect.Value{val}))
+                    ret = t.Method(i).Func.Call([]reflect.Value{val})[0]
+                }
+            }
+        }
     }
 
     //if the lookup value is an interface, return the actual value

@@ -6,7 +6,7 @@ import (
     "path"
     "strings"
     "testing"
-//    "fmt"
+    //    "fmt"
 )
 
 type Test struct {
@@ -26,14 +26,14 @@ type User struct {
 }
 
 func (u User) AddOne() int64 {
-  res := u.Id + 1
- // fmt.Printf("AddOne called: returnung %d", res)
-  return res
+    res := u.Id + 1
+    // fmt.Printf("AddOne called: returnung %d", res)
+    return res
 }
 
 func (u User) ConcatWorld() string {
-  res := u.Name + " World"
-  return res
+    res := u.Name + " World"
+    return res
 }
 
 func makeVector(n int) *vector.Vector {
