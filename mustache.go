@@ -243,6 +243,17 @@ func (tmpl *template) parse() os.Error {
     return nil
 }
 
+func lookupMethod(t reflect.Type, name string) *reflect.Method {
+    for i := 0; i < t.NumMethod(); i++ {
+        m := t.Method(i)
+        fmt.Printf("%v: %d: %s\n", t, i, m.Name)
+        if name == m.Name {
+            return &m
+        }
+    }
+    return nil
+}
+
 func lookup(context reflect.Value, name string) reflect.Value {
     //if the context is an interface, get the actual value
     if iface, ok := context.(*reflect.InterfaceValue); ok && !iface.IsNil() {
@@ -262,13 +273,22 @@ func lookup(context reflect.Value, name string) reflect.Value {
         if nil == ret {
             t := val.Type()
             fmt.Printf("\n\nNo field %s found. Trying: %s\n", name, t)
-            for i := 0; i < t.NumMethod(); i++ {
-                fmt.Printf("%v: %d: %s\n", t, i, t.Method(i).Name)
-                if name == t.Method(i).Name {
-                    fmt.Printf("NumArgs: %d\n", t.Method(i).Type.NumIn())
-                    fmt.Printf("result of calling: %v\n", t.Method(i).Func.Call([]reflect.Value{val}))
-                    ret = t.Method(i).Func.Call([]reflect.Value{val})[0]
+            m := lookupMethod(t, name)
+            if nil == m {
+                t := context.Type()
+                fmt.Printf("Unlucky... trying: %s\n", t)
+                m = lookupMethod(t, name)
+                if nil == m {
+                    fmt.Printf("No luck at all.\n")
+                    return ret
                 }
+                fmt.Printf("NumArgs: %d\n", m.Type.NumIn())
+                ret = m.Func.Call([]reflect.Value{context})[0]
+                fmt.Printf("result of calling: %v\n", ret)
+            } else {
+                fmt.Printf("NumArgs: %d\n", m.Type.NumIn())
+                ret = m.Func.Call([]reflect.Value{val})[0]
+                fmt.Printf("result of calling: %v\n", ret)
             }
         }
     }
