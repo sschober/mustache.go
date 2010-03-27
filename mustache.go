@@ -246,7 +246,7 @@ func (tmpl *template) parse() os.Error {
 func lookupMethod(t reflect.Type, name string) *reflect.Method {
     for i := 0; i < t.NumMethod(); i++ {
         m := t.Method(i)
-        fmt.Printf("%v: %d: %s\n", t, i, m.Name)
+        //        fmt.Printf("%v: %d: %s\n", t, i, m.Name)
         if name == m.Name {
             return &m
         }
@@ -272,30 +272,29 @@ func lookup(context reflect.Value, name string) reflect.Value {
         ret = val.FieldByName(name)
         if nil == ret {
             t := val.Type()
-            fmt.Printf("\n\nNo field %s found. Trying: %s\n", name, t)
+            //          fmt.Printf("\n\nNo field %s found. Trying: %s\n", name, t)
             m := lookupMethod(t, name)
             if nil == m {
                 t := context.Type()
-                fmt.Printf("Unlucky... trying: %s\n", t)
+                //            fmt.Printf("Unlucky... trying: %s\n", t)
                 m = lookupMethod(t, name)
                 if nil == m {
-                    fmt.Printf("No luck at all.\n")
+                    //              fmt.Printf("No luck at all.\n")
                     return ret
                 }
-                fmt.Printf("NumArgs: %d\n", m.Type.NumIn())
+                //        fmt.Printf("NumArgs: %d\n", m.Type.NumIn())
                 ret = m.Func.Call([]reflect.Value{context})[0]
-                fmt.Printf("result of calling: %v\n", ret)
+                //      fmt.Printf("result of calling: %v\n", ret)
             } else {
-                fmt.Printf("NumArgs: %d\n", m.Type.NumIn())
+                //    fmt.Printf("NumArgs: %d\n", m.Type.NumIn())
                 ret = m.Func.Call([]reflect.Value{val})[0]
-                fmt.Printf("result of calling: %v\n", ret)
+                //  fmt.Printf("result of calling: %v\n", ret)
             }
         }
     }
 
     //if the lookup value is an interface, return the actual value
     if iface, ok := ret.(*reflect.InterfaceValue); ok && !iface.IsNil() {
-        fmt.Printf("ret implements InterfaceValue; getting Elem()\n")
         ret = iface.Elem()
     }
 
@@ -361,7 +360,6 @@ func (tmpl *template) renderTemplate(context reflect.Value, buf io.Writer) {
 }
 
 func (tmpl *template) Render(context interface{}, buf io.Writer) {
-    //    fmt.Printf("typeof: %v\n\n", reflect.Typeof(context))
     val := reflect.NewValue(context)
     tmpl.renderTemplate(val, buf)
 }
