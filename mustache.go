@@ -260,15 +260,13 @@ func lookup(context reflect.Value, name string) reflect.Value {
     case *reflect.StructValue:
         ret = val.FieldByName(name)
         if nil == ret {
-            //fmt.Printf("No field %s found. Trying: %s\n", name,
-            //val.Type())
             t := val.Type()
+            fmt.Printf("\n\nNo field %s found. Trying: %s\n", name, t)
             for i := 0; i < t.NumMethod(); i++ {
-                //fmt.Printf("%v: %d: %s\n", t, i,t.Method(i).Name)
+                fmt.Printf("%v: %d: %s\n", t, i, t.Method(i).Name)
                 if name == t.Method(i).Name {
-                    //fmt.Printf("NumArgs: %d", t.Method(i).Type.NumIn())
-                    //fmt.Printf("result of calling: %v",
-                    //t.Method(i).Func.Call([]reflect.Value{val}))
+                    fmt.Printf("NumArgs: %d\n", t.Method(i).Type.NumIn())
+                    fmt.Printf("result of calling: %v\n", t.Method(i).Func.Call([]reflect.Value{val}))
                     ret = t.Method(i).Func.Call([]reflect.Value{val})[0]
                 }
             }
@@ -277,6 +275,7 @@ func lookup(context reflect.Value, name string) reflect.Value {
 
     //if the lookup value is an interface, return the actual value
     if iface, ok := ret.(*reflect.InterfaceValue); ok && !iface.IsNil() {
+        fmt.Printf("ret implements InterfaceValue; getting Elem()\n")
         ret = iface.Elem()
     }
 
@@ -342,7 +341,7 @@ func (tmpl *template) renderTemplate(context reflect.Value, buf io.Writer) {
 }
 
 func (tmpl *template) Render(context interface{}, buf io.Writer) {
-    fmt.Printf("typeof: %v\n\n", reflect.Typeof(context))
+    //    fmt.Printf("typeof: %v\n\n", reflect.Typeof(context))
     val := reflect.NewValue(context)
     tmpl.renderTemplate(val, buf)
 }

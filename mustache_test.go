@@ -31,6 +31,8 @@ func (u User) AddOne() int64 {
     return res
 }
 
+func (u *User) AddOneStar() int64 { return u.AddOne() }
+
 func (u User) ConcatWorld() string {
     res := u.Name + " World"
     return res
@@ -73,6 +75,8 @@ var tests = []Test{
     Test{`{{Name}}`, User{"Mike", 1}, "Mike"},
     Test{`{{Name}}`, &User{"Mike", 1}, "Mike"},
     Test{`{{AddOne}}`, User{"Mike", 1}, "2"},
+    Test{`{{AddOne}}`, &User{"Mike", 1}, "2"},
+    Test{`{{AddOneStar}}`, User{"Mike", 1}, "2"},
     Test{`{{ConcatWorld}}`, User{"Mike", 1}, "Mike World"},
     Test{"{{#users}}\n{{Name}}\n{{/users}}", map[string]interface{}{"users": makeVector(2)}, "Mike\nMike\n"},
     Test{"{{#users}}\r\n{{Name}}\r\n{{/users}}", map[string]interface{}{"users": makeVector(2)}, "Mike\r\nMike\r\n"},
