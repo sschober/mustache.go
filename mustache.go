@@ -280,6 +280,9 @@ func lookup(context reflect.Value, name string) reflect.Value {
                 m = lookupMethod(t, name)
                 if nil == m {
                     //              fmt.Printf("No luck at all.\n")
+		    if '*' != t.Name()[0] {
+		      fmt.Printf("Warning: Passing a Value type (%v) might hide some method declarations.\n", val.Type())
+		    }
                     return ret
                 }
                 //        fmt.Printf("NumArgs: %d\n", m.Type.NumIn())
