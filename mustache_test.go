@@ -74,8 +74,8 @@ var tests = []Test{
     Test{`{{Name}}`, User{"Mike", 1}, "Mike"},
     Test{`{{Name}}`, &User{"Mike", 1}, "Mike"},
     Test{`{{AddOne}}`, User{"Mike", 1}, "2"},
-    // The next two tests don't work
-    //Test{`{{AddOne}}`, &User{"Mike", 1}, "2"},
+    Test{`{{AddOne}}`, &User{"Mike", 1}, "2"},
+    // The next test doesn't work due to reflection issues (see mustache.go:func lookup)
     //Test{`{{AddOneStar}}`, User{"Mike", 1}, "2"},
     Test{`{{AddOneStar}}`, &User{"Mike", 1}, "2"},
     Test{`{{ConcatWorld}}`, User{"Mike", 1}, "Mike World"},
