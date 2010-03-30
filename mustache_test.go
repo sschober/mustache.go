@@ -77,6 +77,8 @@ var tests = []Test{
     Test{`{{AddOne}}`, &User{"Mike", 1}, "2"},
     // The next test doesn't work due to reflection issues (see mustache.go:func lookup)
     //Test{`{{AddOneStar}}`, User{"Mike", 1}, "2"},
+    // Test for expected failure
+    Test{`{{AddOneStar}}`, User{"Mike", 1}, ""},
     Test{`{{AddOneStar}}`, &User{"Mike", 1}, "2"},
     Test{`{{ConcatWorld}}`, User{"Mike", 1}, "Mike World"},
     Test{"{{#users}}\n{{Name}}\n{{/users}}", map[string]interface{}{"users": makeVector(2)}, "Mike\nMike\n"},
